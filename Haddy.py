@@ -11,5 +11,3 @@ for i in range(10):
     list.append((num,num2))
     
 print(list)
-            
-
