@@ -15,11 +15,20 @@ def generator():
 def askUser():
     global guessColumn
     global guessRow
-    guessRow = input("What row do you pick between 1-8? ")
-    guessColumn = input("What column do you pick between 1-8? ")
-
-    
-
+    while True:
+        guessRow = input("What Row do you pick between 1-8? ")
+        if guessRow.isnumeric(): 
+            if int(guessRow) >= 1 and int(guessRow) <= 8:
+                break
+        print('Incorrect input, please enter an integer inbetween 1 and 8')
+        
+    while True:
+        guessColumn = input("What Column do you pick between 1-8? ")
+        if guessColumn.isnumeric():
+            if int(guessColumn) >= 1 and int(guessColumn) <= 8:
+                break
+        print('Incorrect input, please enter an integer inbetween 1 and 8')
+            
 def userCheck():
     guess = [int(guessRow),int(guessColumn)]
     print(guess)
