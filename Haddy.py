@@ -131,4 +131,11 @@ def checkmines():
             mine10=(x10,y10)
             print(str(mine9)  + 'mine 9')
             print(str(mine10) + 'mine 10')
-checkmines()
+            
+
+list=[]
+for b in (1,10):
+    num=random.randint(1,8)
+    num2=random.randint(1,8)
+    list.append((num, num2))
+print(list)
