@@ -52,6 +52,7 @@ for i in list:
     listx = [x[0] for x in list]
     listy = [x[1] for x in list]
     puzzle[[x[0] for x in list]][[x[1] for x in list]] = "mine" 
+
 print(listx)
 print(listy)
 
