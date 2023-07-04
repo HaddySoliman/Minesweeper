@@ -33,32 +33,85 @@ def askUser():
                 break
         print('Incorrect input, please enter an integer inbetween 1 and 8')            
 def userCheck():
-    guess = [int(guessRow),int(guessColumn)]
-    print(guess)
+    global guess
+    global guessX
+    global guessY
+    guess = ((int(guessRow)-1),  (int(guessColumn)-1))
+    guessX = (int(guessRow)-1)
+    guessY = (int(guessColumn)-1)
+    print(guessX)
+    print(guessY)
     for b in list:
         if guess == b:
             print('You Lose!')
-            lose=True
+            lose = True
             quit
-    
+def checkForBombs():
+    global count
+    global r
+    global c
+    global row
+    global col 
+    count = 0
+    r = len(puzzle)
+    c = len(puzzle[0])
+    for row in range (r):
+        for col in range (c):
+            # Check if space is a mine
+            if puzzle_mines[row][col] == "M":
+                continue
+            # Check up  
+            if row > 0 and puzzle_mines[row-1][col] == "M":
+                count = count + 1
+            # Check down    
+            if row < r-1  and puzzle_mines[row+1][col] == "M":
+                count = count + 1
+            # Check left
+            if col > 0 and puzzle_mines[row][col-1] == "M":
+                count = count + 1
+            # Check right
+            if col < c-1 and puzzle_mines[row][col+1] == "M":
+                count = count + 1
+            # Check top-left    
+            if row > 0 and col > 0 and puzzle_mines[row-1][col-1] == "M":
+                count = count + 1
+            # Check top-right
+            if row > 0 and col < c-1 and puzzle_mines[row-1][col+1] == "M":
+                count = count + 1
+            # Check below-left  
+            if row < r-1 and col > 0 and puzzle_mines[row+1][col-1] == "M":
+                count = count + 1
+            # Check below-right
+            if row < r-1 and col < c-1 and puzzle_mines[row+1][col+1] == "M":
+                count = count + 1
+            puzzle_mines[row][col] = count
+            count = 0
+            print(puzzle_mines)
 generator()
-
-
 puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
 puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
+
+
 for i in list:
-<<<<<<< HEAD
-    listx = [x[0] for x in list]
-    listy = [x[1] for x in list]
-    puzzle[[x[0] for x in list]][[x[1] for x in list]] = "mine" 
-
-print(listx)
-print(listy)
-
-=======
     puzzle_mines[i[0]][i[1]] = "M" 
->>>>>>> d3cc6d49e9311abf407dd272d642e80c8d25c155
+checkForBombs()
 
+askUser()
+userCheck()
+#for i in guess:
+    #guessX = str( [i[0]] )
+    #guessY = str( [i[1]] )
+puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+
+puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
+
+puzzle_arrr
+grid_mines = tt.to_string(
+    puzzle_arrr,
+    style=tt.styles.ascii_thin,
+    # alignment="ll",
+    # padding=(0, 1),
+)
 puzzle_arr = np.array(puzzle).reshape(-1, 8)
 
 puzzle_arr
@@ -69,3 +122,5 @@ grid = tt.to_string(
     # padding=(0, 1),
 )
 print(grid) 
+print("                 ")
+print(grid_mines)

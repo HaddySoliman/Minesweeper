@@ -96,10 +96,12 @@ def checkForBombs():
             # Check below-right
             if row < r-1 and col < c-1 and puzzle_mines[row+1][col+1] == "M":
                 count = count + 1
-            puzzle[row][col] = count
+            puzzle_mines[row][col] = count
             count = 0
+            print(puzzle_mines)
+            print(puzzle)
 
-
-
-welcomeInstructions()
-print(grid) 
+checkForBombs()
+#welcomeInstructions()
+print(grid)
+#askUser()
