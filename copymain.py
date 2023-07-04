@@ -33,17 +33,17 @@ def askUser():
                 break
         print('Incorrect input, please enter an integer inbetween 1 and 8')            
 def userCheck():
-    guess = [int(guessRow),int(guessColumn)]
+    guess = [(int(guessRow)-1),(int(guessColumn)-1)]
     print(guess)
     for b in list:
         if guess == b:
             print('You Lose!')
-            lose=True
+            lose = True
             quit
-    
+
 generator()
-
-
+askUser()
+userCheck()
 puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
 puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
 for i in list:
