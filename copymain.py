@@ -34,14 +34,32 @@ def askUser():
         print('Incorrect input, please enter an integer inbetween 1 and 8')            
 def userCheck():
     global guess
+<<<<<<< HEAD
+    global guessX
+    global guessY
+    guess = ((int(guessRow)-1),  (int(guessColumn)-1))
+    guessX = (int(guessRow)-1)
+    guessY = (int(guessColumn)-1)
+    print(guessX)
+    print(guessY)
+=======
     guess = ((int(guessRow)-1),(int(guessColumn)-1))
     print(guess)
+>>>>>>> 238667d60a492237364782c34e03222ee4fdeda4
     for b in list:
         if guess == b:
             print('You Lose!')
             lose = True
             quit
 def checkForBombs():
+<<<<<<< HEAD
+    global count
+    global r
+    global c
+    global row
+    global col 
+=======
+>>>>>>> 238667d60a492237364782c34e03222ee4fdeda4
     count = 0
     r = len(puzzle)
     c = len(puzzle[0])
@@ -85,7 +103,26 @@ puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "
 for i in list:
     puzzle_mines[i[0]][i[1]] = "M" 
 checkForBombs()
+<<<<<<< HEAD
 
+askUser()
+userCheck()
+#for i in guess:
+    #guessX = str( [i[0]] )
+    #guessY = str( [i[1]] )
+puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+=======
+>>>>>>> 238667d60a492237364782c34e03222ee4fdeda4
+
+puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
+
+puzzle_arrr
+grid_mines = tt.to_string(
+    puzzle_arrr,
+    style=tt.styles.ascii_thin,
+    # alignment="ll",
+    # padding=(0, 1),
+)
 puzzle_arr = np.array(puzzle).reshape(-1, 8)
 
 puzzle_arr
@@ -115,4 +152,7 @@ puzzle[guess[0]][guess[1]] = puzzle_mines[guess[0]][guess[1]]
 print(grid) 
 print("                 ")
 print(grid_mines)
+<<<<<<< HEAD
+=======
 
+>>>>>>> 238667d60a492237364782c34e03222ee4fdeda4
