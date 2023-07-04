@@ -1,5 +1,4 @@
 import random
-import time
 
 list=[]
 for i in range(10):
