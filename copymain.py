@@ -108,8 +108,8 @@ grid_mines = tt.to_string(
 
 askUser()
 userCheck()
-for i in guess:
-    puzzle[i[0]][i[1]] = str( puzzle_mines[i[0]][i[1]])
+
+puzzle[guess[0]][guess[1]] = puzzle_mines[guess[0]][guess[1]]
 
 
 print(grid) 
