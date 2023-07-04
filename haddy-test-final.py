@@ -17,11 +17,11 @@ def generator():
         num=num-1
         num2=num2-1
         list.append((num,num2))
-    print(list)
     return(list)
 def askUser():
     global guessColumn
     global guessRow
+    global flagged
     while True:
         guessRow = input("What Row do you pick between 1-8? ")
         if guessRow.isnumeric(): 
@@ -34,20 +34,41 @@ def askUser():
         if guessColumn.isnumeric():
             if int(guessColumn) >= 1 and int(guessColumn) <= 8:
                 break
-        print('Incorrect input, please enter an integer inbetween 1 and 8')            
+        print('Incorrect input, please enter an integer inbetween 1 and 8') 
+    while True:
+        flagged = input("Do you want to flag this square? Type Y or N ")
+        if flagged.isalpha():
+            if flagged == "n" or flagged == "N":
+                flagged = False
+                break
+            if flagged  == "y" or  flagged == "Y":
+                guessRow=(int(guessRow)-1)
+                guessColumn=(int(guessColumn)-1)
+                if puzzle[guessRow][guessColumn] == "X":
+                    puzzle[guessRow][guessColumn] = " "
+                    break
+                puzzle[guessRow][guessColumn] = "X"
+                flagged = True
+                break
+        print('Incorrect input, please enter Y(yes) or N(no)') 
+            
+            
 def userCheck():
     global guess
     global guessX
     global guessY
     global lose
-    guess = ((int(guessRow)-1),  (int(guessColumn)-1))
-    guessX = (int(guessRow)-1)
-    guessY = (int(guessColumn)-1)
-    for b in list:
-        if guess == b:
-            print('You Lose!')
-            lose = True
-            quit
+    print(flagged)
+    if not flagged:
+        print("Entered")
+        guess = ((int(guessRow)-1),  (int(guessColumn)-1))
+        guessX = (int(guessRow)-1)
+        guessY = (int(guessColumn)-1)
+        for b in list:
+            if guess == b:
+                print('You Lose!')
+                lose = True
+                break
 def checkForBombs():
     global count
     global r
@@ -97,7 +118,8 @@ checkForBombs()
 while lose == False and win == False:
     askUser()
     userCheck()
-    puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+    if not flagged:
+        puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
     puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
     puzzle_arrr
     grid_mines = tt.to_string(

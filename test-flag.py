@@ -16,12 +16,13 @@ def askUser():
         print('Incorrect input, please enter an integer inbetween 1 and 8') 
     
     while True:
-        flagged = input("Do you want to flag this square? Type Y(yes) or N(no)")
+        flagged = input("Do you want to flag this square? Type Y or N ")
         if flagged.isalpha():
-            if flagged != "y" or "n" or "Y" or "N":
+            if flagged != "y" or flagged != "n" or flagged != "Y" or flagged != "N":
                 print('Incorrect input, please enter Y(yes) or N(no)') 
             if flagged == "Y" or "y":
                 puzzle[row][col] = "X"
             elif flagged == "N" or "n":
                 puzzle[row][col] = "X"
             
+askUser()
