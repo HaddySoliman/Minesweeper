@@ -28,6 +28,7 @@ def askUser():
             if int(guessColumn) >= 1 and int(guessColumn) <= 8:
                 break
         print('Incorrect input, please enter an integer inbetween 1 and 8')
+    
             
 def userCheck():
     guess = [int(guessRow),int(guessColumn)]
