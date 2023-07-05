@@ -7,7 +7,9 @@ win = False
 welcomeInstructions()
 def generator():
     global list
+    global flag_list
     list=[]
+    flag_list = []
     for i in range(10):
         num=random.randint(1,8)
         num2=random.randint(1,8) 
@@ -45,12 +47,15 @@ def askUser():
                 guessRow=(int(guessRow)-1)
                 guessColumn=(int(guessColumn)-1)
                 if puzzle[guessRow][guessColumn] == "X":
-                    puzzle[guessRow][guessColumn] = " "
+                    puzzle[guessRow][guessColumn] = "?"
+                    flag_list.__delitem__((guessRow,guessColumn))
                     break
                 puzzle[guessRow][guessColumn] = "X"
+                flag_list.append((guessRow,guessColumn))
+                print(flag_list)
                 flagged = True
                 break
-        print('Incorrect input, please enter Y(yes) or N(no)') 
+        print('Incorrect input, please enter Y or N') 
             
             
 def userCheck():
@@ -58,9 +63,7 @@ def userCheck():
     global guessX
     global guessY
     global lose
-    print(flagged)
     if not flagged:
-        print("Entered")
         guess = ((int(guessRow)-1),  (int(guessColumn)-1))
         guessX = (int(guessRow)-1)
         guessY = (int(guessColumn)-1)
@@ -119,7 +122,10 @@ while lose == False and win == False:
     askUser()
     userCheck()
     if not flagged:
-        puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+        if not (guessX,guessY) in flag_list:
+            puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+        else:
+            print('this space has been flagged')
     puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
     puzzle_arrr
     grid_mines = tt.to_string(
