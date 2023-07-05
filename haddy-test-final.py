@@ -48,7 +48,7 @@ def askUser():
                 guessColumn=(int(guessColumn)-1)
                 if puzzle[guessRow][guessColumn] == "X":
                     puzzle[guessRow][guessColumn] = "?"
-                    flag_list.__delitem__((guessRow,guessColumn))
+                    flag_list.remove((guessRow,guessColumn))
                     break
                 puzzle[guessRow][guessColumn] = "X"
                 flag_list.append((guessRow,guessColumn))
@@ -125,7 +125,7 @@ while lose == False and win == False:
         if not (guessX,guessY) in flag_list:
             puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
         else:
-            print('this space has been flagged')
+            print('This space has been flagged')
     puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
     puzzle_arrr
     grid_mines = tt.to_string(
