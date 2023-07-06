@@ -4,9 +4,26 @@ import termtables as tt
 import random
 lose = False
 win = False
-count=0
+win_count=0
 restart = 'y'
-welcomeInstructions()
+def fill(x, y):
+    global zero_list
+    if x < 0 or y < 0 or x >= r or y >= c:
+        return puzzle
+    if puzzle_mines[x][y] != "0" or puzzle[x][y] == "-":
+        return puzzle
+    else:
+        puzzle[x][y] = "-"
+        zero_list.append((x,y))
+        fill(x - 1, y)
+        fill(x + 1, y)
+        fill(x, y - 1)
+        fill(x, y + 1)
+        fill(x - 1, y - 1)
+        fill(x - 1, y + 1)
+        fill(x + 1, y - 1)
+        fill(x + 1, y + 1)
+    return puzzle
 def generator():
     global list
     global flag_list
@@ -26,6 +43,8 @@ def askUser():
     global guessColumn
     global guessRow
     global flagged
+    global zero_list
+    zero_list=[]
     while True:
         guessRow = input("What Row do you pick between 1-8? ")
         if guessRow.isnumeric(): 
@@ -65,9 +84,10 @@ def userCheck():
     global guessX
     global guessY
     global lose
-    global count
+    global win_count
     global win
     global restart
+    global puzzle_mines
     if not flagged:
         guess = ((int(guessRow)-1),  (int(guessColumn)-1))
         guessX = (int(guessRow)-1)
@@ -76,11 +96,14 @@ def userCheck():
             if guess == b:
                 print('You Lose!')
                 restart = input('Would you like to restart? Y or N')
+                if restart == 'n' or restart == 'N':
+                    quit()
                 lose = True
                 break
-        count += 1
-        print(count)
-        if count == 54:
+        if puzzle_mines[guessX][guessY] != '0':
+                win_count += 1
+        print(win_count)
+        if win_count >= 54:
             print("You Win!!!")
             restart = input('Would you like to restart? Y or N')
             win = True 
@@ -126,7 +149,7 @@ def checkForBombs():
             puzzle_mines[row][col] = count
             count = 0
 
-while restart == 'y' or 'Y':
+while restart == 'y' or restart == 'Y':
     generator()
     puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
     puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
@@ -141,6 +164,11 @@ while restart == 'y' or 'Y':
                 puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
             else:
                 print('This space has been flagged')
+            fill(guessX,guessY)
+            print(zero_list)
+            for i in zero_list:
+                print('a')
+                win_count = win_count+1
         puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
         puzzle_arrr
         grid_mines = tt.to_string(

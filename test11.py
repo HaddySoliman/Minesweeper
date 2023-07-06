@@ -166,4 +166,3 @@ while lose == False and win == False:
     print(grid) 
     print("                 ")
     print(grid_mines)
-    print(untilWin)
