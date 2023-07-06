@@ -102,7 +102,7 @@ def userCheck():
         mines_count += 1
         print("You have flagged", mines_count, "mines")
     if not flagged:
-        guess = ((int(guessRow)-1),  (int(guessColumn)-1))
+        guess = ((int(guessRow)-1),(int(guessColumn)-1))
         guessX = (int(guessRow)-1)
         guessY = (int(guessColumn)-1)
         for b in list:
@@ -170,13 +170,14 @@ while restart == 'y' or restart == 'Y':
         askUser()
         userCheck()
         if not flagged:
-            if not (guessX,guessY) in flag_list:
+            if not guess in flag_list:
                 puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+                fill(guessX,guessY)
+                for i in zero_list:
+                    win_count = win_count+1
             else:
                 print('This space has been flagged')
-            fill(guessX,guessY)
-            for i in zero_list:
-                win_count = win_count+1
+                
         puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
         puzzle_arrr
         grid_mines = tt.to_string(
