@@ -4,6 +4,8 @@ import termtables as tt
 import random
 lose = False
 win = False
+count=0
+restart = 'y'
 welcomeInstructions()
 def generator():
     global list
@@ -63,6 +65,9 @@ def userCheck():
     global guessX
     global guessY
     global lose
+    global count
+    global win
+    global restart
     if not flagged:
         guess = ((int(guessRow)-1),  (int(guessColumn)-1))
         guessX = (int(guessRow)-1)
@@ -70,8 +75,16 @@ def userCheck():
         for b in list:
             if guess == b:
                 print('You Lose!')
+                restart = input('Would you like to restart? Y or N')
                 lose = True
                 break
+        count += 1
+        print(count)
+        if count == 54:
+            print("You Win!!!")
+            restart = input('Would you like to restart? Y or N')
+            win = True 
+
 def checkForBombs():
     global count
     global r
@@ -112,36 +125,38 @@ def checkForBombs():
                 count = count + 1
             puzzle_mines[row][col] = count
             count = 0
-generator()
-puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
-puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
-for i in list:
-    puzzle_mines[i[0]][i[1]] = "M" 
-checkForBombs()
-while lose == False and win == False:
-    askUser()
-    userCheck()
-    if not flagged:
-        if not (guessX,guessY) in flag_list:
-            puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
-        else:
-            print('This space has been flagged')
-    puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
-    puzzle_arrr
-    grid_mines = tt.to_string(
-        puzzle_arrr,
-        style=tt.styles.ascii_thin,
-        # alignment="ll",
-        # padding=(0, 1),
-    )
-    puzzle_arr = np.array(puzzle).reshape(-1, 8)
-    puzzle_arr
-    grid = tt.to_string(
-        puzzle_arr,
-        style=tt.styles.ascii_thin,
-        # alignment="ll",
-        # padding=(0, 1),
-    )
-    print(grid) 
-    print("                 ")
-    print(grid_mines)
+
+while restart == 'y' or 'Y':
+    generator()
+    puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
+    puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
+    for i in list:
+        puzzle_mines[i[0]][i[1]] = "M" 
+    checkForBombs()
+    while lose == False and win == False:
+        askUser()
+        userCheck()
+        if not flagged:
+            if not (guessX,guessY) in flag_list:
+                puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+            else:
+                print('This space has been flagged')
+        puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
+        puzzle_arrr
+        grid_mines = tt.to_string(
+            puzzle_arrr,
+            style=tt.styles.ascii_thin,
+            # alignment="ll",
+            # padding=(0, 1),
+        )
+        puzzle_arr = np.array(puzzle).reshape(-1, 8)
+        puzzle_arr
+        grid = tt.to_string(
+            puzzle_arr,
+            style=tt.styles.ascii_thin,
+            # alignment="ll",
+            # padding=(0, 1),
+        )
+        print(grid) 
+        print("                 ")
+        print(grid_mines)
