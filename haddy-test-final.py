@@ -2,19 +2,28 @@ import numpy as np
 from Welcome import welcomeInstructions
 import termtables as tt
 import random
+import time 
 lose = False
 win = False
 win_count=0
+mines_count = 0
 restart = 'y'
+
+start=input ("Press enter to start playing!")
+print("The timer has started")
+start_time = time.time()
+
 def fill(x, y):
-    global zero_list
     if x < 0 or y < 0 or x >= r or y >= c:
         return puzzle
-    if puzzle_mines[x][y] != "0" or puzzle[x][y] == "-":
-        return puzzle
-    else:
+   
+    if puzzle[x][y] != "-":
+        puzzle[x][y] = puzzle_mines[x][y]
+        zero_list.add((x,y))
+
+    if puzzle[x][y] == "0":
         puzzle[x][y] = "-"
-        zero_list.append((x,y))
+        zero_list.add((x,y))
         fill(x - 1, y)
         fill(x + 1, y)
         fill(x, y - 1)
@@ -44,7 +53,7 @@ def askUser():
     global guessRow
     global flagged
     global zero_list
-    zero_list=[]
+    zero_list=set([])
     while True:
         guessRow = input("What Row do you pick between 1-8? ")
         if guessRow.isnumeric(): 
@@ -88,6 +97,10 @@ def userCheck():
     global win
     global restart
     global puzzle_mines
+    global mines_count
+    if flagged:
+        mines_count += 1
+        print("You have flagged", mines_count, "mines")
     if not flagged:
         guess = ((int(guessRow)-1),  (int(guessColumn)-1))
         guessX = (int(guessRow)-1)
@@ -100,9 +113,6 @@ def userCheck():
                     quit()
                 lose = True
                 break
-        if puzzle_mines[guessX][guessY] != '0':
-                win_count += 1
-        print(win_count)
         if win_count >= 54:
             print("You Win!!!")
             restart = input('Would you like to restart? Y or N')
@@ -165,9 +175,7 @@ while restart == 'y' or restart == 'Y':
             else:
                 print('This space has been flagged')
             fill(guessX,guessY)
-            print(zero_list)
             for i in zero_list:
-                print('a')
                 win_count = win_count+1
         puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
         puzzle_arrr
@@ -188,3 +196,7 @@ while restart == 'y' or restart == 'Y':
         print(grid) 
         print("                 ")
         print(grid_mines)
+        if win or lose:
+            end_time = time.time()
+            elapsed= end_time - start_time
+            print ("You took ... ", elapsed, "seconds")
