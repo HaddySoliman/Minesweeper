@@ -7,7 +7,7 @@ lose = False
 win = False
 win_count=0
 mines_count = 0
-restart = 'y'
+guess_list = set()
 
 start=input ("Press enter to start playing!")
 print("The timer has started")
@@ -47,6 +47,7 @@ def generator():
         num=num-1
         num2=num2-1
         list.append((num,num2))
+    print(list)
     return(list)
 def askUser():
     global guessColumn
@@ -82,6 +83,10 @@ def askUser():
                     flag_list.remove((guessRow,guessColumn))
                     mines_count-=1
                     break
+                elif puzzle[guessRow][guessColumn] != "X" and puzzle[guessRow][guessColumn] != " ":
+                    print('You have already opened this square')
+                    mines_count-=1
+                    break
                 puzzle[guessRow][guessColumn] = "X"
                 flag_list.append((guessRow,guessColumn))
                 print(flag_list)
@@ -97,7 +102,6 @@ def userCheck():
     global lose
     global win_count
     global win
-    global restart
     global puzzle_mines
     global mines_count
     if flagged:
@@ -107,19 +111,14 @@ def userCheck():
         guess = ((int(guessRow)-1),(int(guessColumn)-1))
         guessX = (int(guessRow)-1)
         guessY = (int(guessColumn)-1)
-        for b in list:
-            if guess == b:
-                print('You Lose!')
-                restart = input('Would you like to restart? Y or N')
-                if restart == 'n' or restart == 'N':
-                    quit()
-                lose = True
-                break
-        if win_count >= 54:
-            print("You Win!!!")
-            restart = input('Would you like to restart? Y or N')
-            win = True 
-
+        guess_list.add (guess)
+        if puzzle[guessX][guessY] != 'X':
+            for b in list:
+                if guess == b:
+                    print('You Lose!')
+                    lose = True
+                    break
+    
 def checkForBombs():
     global count
     global r
@@ -161,45 +160,47 @@ def checkForBombs():
             puzzle_mines[row][col] = count
             count = 0
 
-while restart == 'y' or restart == 'Y':
-    generator()
-    puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
-    puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
-    for i in list:
-        puzzle_mines[i[0]][i[1]] = "M" 
-    checkForBombs()
-    while lose == False and win == False:
-        askUser()
-        userCheck()
-        if not flagged:
-            if not guess in flag_list:
-                puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
-                fill(guessX,guessY)
-                for i in zero_list:
-                    win_count = win_count+1
-            else:
-                print('This space has been flagged')
+
+generator()
+puzzle = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
+puzzle_mines = np.array([[" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "], [" "," "," "," "," "," "," "," "]])
+for i in list:
+    puzzle_mines[i[0]][i[1]] = "M" 
+checkForBombs()
+while lose == False and win == False:
+    askUser()
+    userCheck()
+    if not flagged:
+        if not guess in flag_list and puzzle[guessX][guessY] == " ":
+            puzzle[guessX][guessY] = puzzle_mines[guessX][guessY]
+            fill(guessX,guessY)
+            guess_list.update(zero_list)
+            if len(guess_list) >= 54:
+                    print("You Win!!!")
+                    win = True 
+
+        else:
+            print('This space has been flagged or opened')
                 
-        puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
-        puzzle_arrr
-        grid_mines = tt.to_string(
-            puzzle_arrr,
-            style=tt.styles.ascii_thin,
-            # alignment="ll",
-            # padding=(0, 1),
+    puzzle_arrr = np.array(puzzle_mines).reshape(-1, 8)
+    puzzle_arrr
+    grid_mines = tt.to_string(
+        puzzle_arrr,
+        style=tt.styles.ascii_thin,
+        # alignment="ll",
+        # padding=(0, 1),
         )
-        puzzle_arr = np.array(puzzle).reshape(-1, 8)
-        puzzle_arr
-        grid = tt.to_string(
-            puzzle_arr,
-            style=tt.styles.ascii_thin,
-            # alignment="ll",
-            # padding=(0, 1),
+    puzzle_arr = np.array(puzzle).reshape(-1, 8)
+    puzzle_arr
+    grid = tt.to_string(
+        puzzle_arr,
+        style=tt.styles.ascii_thin,
+        # alignment="ll",
+        # padding=(0, 1),
         )
-        print(grid) 
-        print("                 ")
-        print(grid_mines)
-        if win or lose:
-            end_time = time.time()
-            elapsed= end_time - start_time
-            print ("You took ... ", elapsed, "seconds")
+    print(guess_list)
+    print(grid) 
+    if win or lose:
+        end_time = time.time()
+        elapsed= end_time - start_time
+        print ("You took ... ", elapsed, "seconds")
